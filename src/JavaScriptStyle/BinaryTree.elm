@@ -5,12 +5,14 @@ module JavaScriptStyle.BinaryTree
         , member
         )
 
+import Maybe.Extra
+
 
 type BinaryTree comparable
     = BinaryTree
         { value : comparable
-        , left : Maybe BinaryTree
-        , right : Maybe BinaryTree
+        , left : Maybe (BinaryTree comparable)
+        , right : Maybe (BinaryTree comparable)
         }
 
 
@@ -24,5 +26,10 @@ new value =
 
 
 member : comparable -> BinaryTree comparable -> Bool
-member value tree =
-    False
+member value (BinaryTree tree) =
+    if value < tree.value then
+        Maybe.Extra.mapDefault False (member value) tree.left
+    else if value > tree.value then
+        Maybe.Extra.mapDefault False (member value) tree.right
+    else
+        value == tree.value
