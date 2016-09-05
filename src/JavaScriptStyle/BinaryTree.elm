@@ -4,6 +4,7 @@ module JavaScriptStyle.BinaryTree
         , new
         , member
         , insert
+        , remove
         )
 
 import Maybe.Extra
@@ -52,3 +53,8 @@ insert value (BinaryTree tree) =
             }
     else
         BinaryTree tree
+
+
+remove : comparable -> BinaryTree comparable -> BinaryTree comparable
+remove value tree =
+    tree

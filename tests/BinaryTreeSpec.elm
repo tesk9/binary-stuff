@@ -49,4 +49,32 @@ suite =
                     Expect.equal
                         False
                         (List.any (\val -> BinaryTree.member val tree) uninsertedValues)
+        , test "removing the root value removes the value" <|
+            \() ->
+                Expect.equal
+                    False
+                    (BinaryTree.new 0 |> BinaryTree.insert 1 |> BinaryTree.remove 0 |> BinaryTree.member 0)
+        , test "removing a middle value removes the value" <|
+            \() ->
+                Expect.equal
+                    False
+                    (BinaryTree.new 0 |> BinaryTree.insert 1 |> BinaryTree.insert 2 |> BinaryTree.remove 1 |> BinaryTree.member -2)
+        , test "removing a leaf value removes the value" <|
+            \() ->
+                Expect.equal
+                    False
+                    (BinaryTree.new 0 |> BinaryTree.insert -2 |> BinaryTree.remove -2 |> BinaryTree.member -2)
+        , test "removing a value preserves all other values" <|
+            \() ->
+                let
+                    values =
+                        [ 1, -10, 2, 7 ]
+
+                    tree =
+                        List.foldl BinaryTree.insert (BinaryTree.new 3) values
+                            |> BinaryTree.remove 3
+                in
+                    Expect.equal
+                        True
+                        (List.all (\val -> BinaryTree.member val tree) values)
         ]
