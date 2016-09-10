@@ -7,7 +7,7 @@ import ArrayBased.BinaryTree as BinaryTree
 
 suite : Test
 suite =
-    describe "JavaScripty Tree"
+    describe "ArrayBased Tree"
         [ test "a new tree has its initial value" <|
             \() ->
                 Expect.equal

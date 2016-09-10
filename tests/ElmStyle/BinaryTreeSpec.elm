@@ -7,7 +7,7 @@ import ElmStyle.BinaryTree as BinaryTree
 
 suite : Test
 suite =
-    describe "JavaScripty Tree"
+    describe "ElmStyle Tree"
         [ test "a new tree has its initial value" <|
             \() ->
                 Expect.equal
