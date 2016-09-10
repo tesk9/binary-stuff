@@ -3,11 +3,13 @@ module Tests exposing (..)
 import Test exposing (..)
 import Expect
 import String
-import BinaryTreeSpec
+import JavaScriptStyle.BinaryTreeSpec
+import ElmStyle.BinaryTreeSpec
 
 
 all : Test
 all =
     describe "Binary Tree Suite"
-        [ BinaryTreeSpec.suite
+        [ JavaScriptStyle.BinaryTreeSpec.suite
+        , ElmStyle.BinaryTreeSpec.suite
         ]

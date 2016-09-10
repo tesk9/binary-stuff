@@ -1,4 +1,4 @@
-module BinaryTreeSpec exposing (suite)
+module JavaScriptStyle.BinaryTreeSpec exposing (suite)
 
 import Test exposing (..)
 import Expect
