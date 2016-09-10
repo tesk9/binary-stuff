@@ -88,22 +88,25 @@ remove value tree =
                     }
             else
                 case ( node.left, node.right ) of
-                    ( left, Node rightTree ) ->
-                        Node
-                            { value = rightTree.value
-                            , right = rightTree.right
-                            , left = left
-                            }
-
-                    ( Node leftTree, Empty ) ->
-                        Node
-                            { value = leftTree.value
-                            , right = empty
-                            , left = leftTree.left
-                            }
-
+                    -- No children to consider
                     ( Empty, Empty ) ->
                         empty
+
+                    -- One child, on the right
+                    ( Empty, Node rightTree ) ->
+                        Node rightTree
+
+                    -- One child, on the left
+                    ( Node leftTree, Empty ) ->
+                        Node leftTree
+
+                    -- Two children, right and left
+                    ( Node leftTree, Node rightTree ) ->
+                        Node
+                            { value = rightTree.value
+                            , left = Node leftTree
+                            , right = remove rightTree.value (Node rightTree)
+                            }
 
         Empty ->
             Empty
