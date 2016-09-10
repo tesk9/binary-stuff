@@ -49,32 +49,33 @@ suite =
                     Expect.equal
                         False
                         (List.any (\val -> BinaryTree.member val tree) uninsertedValues)
-        , test "removing the root value removes the value" <|
+        , test "removing the root value works" <|
             \() ->
-                Expect.equal
-                    False
-                    (BinaryTree.new 0 |> BinaryTree.insert 1 |> BinaryTree.remove 0 |> BinaryTree.member 0)
+                Expect.equal True (assertRemoval 0 [ 0, -1, 1 ])
         , test "removing a middle value removes the value" <|
             \() ->
-                Expect.equal
-                    False
-                    (BinaryTree.new 0 |> BinaryTree.insert 1 |> BinaryTree.insert 2 |> BinaryTree.remove 1 |> BinaryTree.member -2)
+                Expect.equal True (assertRemoval 0 [ 1, 0, -1, -3, 2 ])
         , test "removing a leaf value removes the value" <|
             \() ->
-                Expect.equal
-                    False
-                    (BinaryTree.new 0 |> BinaryTree.insert -2 |> BinaryTree.remove -2 |> BinaryTree.member -2)
-        , test "removing a value preserves all other values" <|
-            \() ->
-                let
-                    values =
-                        [ 1, -10, 2, 7 ]
-
-                    tree =
-                        List.foldl BinaryTree.insert (BinaryTree.new 3) values
-                            |> BinaryTree.remove 3
-                in
-                    Expect.equal
-                        True
-                        (List.all (\val -> BinaryTree.member val tree) values)
+                Expect.equal True (assertRemoval 0 [ -1, -2, 0 ])
         ]
+
+
+assertRemoval : Int -> List Int -> Bool
+assertRemoval toRemove dummyBinaryTreeValues =
+    let
+        tree =
+            dummyBinaryTreeValues
+                |> List.foldl BinaryTree.insert BinaryTree.empty
+                |> BinaryTree.remove toRemove
+
+        removeValueRemoved =
+            BinaryTree.member toRemove tree
+                |> not
+
+        otherValuesPreserved =
+            dummyBinaryTreeValues
+                |> List.filter ((/=) toRemove)
+                |> List.all (\val -> BinaryTree.member val tree)
+    in
+        removeValueRemoved && otherValuesPreserved
