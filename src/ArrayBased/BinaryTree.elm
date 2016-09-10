@@ -26,8 +26,23 @@ new value =
 
 
 member : comparable -> BinaryTree comparable -> Bool
-member value tree =
-    False
+member =
+    memberAt 0
+
+
+memberAt : Int -> comparable -> BinaryTree comparable -> Bool
+memberAt index value tree =
+    case Array.get index tree of
+        Just nodeValue ->
+            if value < nodeValue then
+                memberAt (2 * index + 1) value tree
+            else if value > nodeValue then
+                memberAt (2 * index + 2) value tree
+            else
+                value == nodeValue
+
+        Nothing ->
+            False
 
 
 insert : comparable -> BinaryTree comparable -> BinaryTree comparable
