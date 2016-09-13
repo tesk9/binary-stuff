@@ -49,6 +49,12 @@ suite =
                     Expect.equal
                         False
                         (List.any (\val -> BinaryTree.member val tree) uninsertedValues)
+        , test "removing a value from an empty tree works" <|
+            \() ->
+                Expect.equal True (assertRemoval 0 [])
+        , test "removing a value from a singleton tree works" <|
+            \() ->
+                Expect.equal True (assertRemoval 0 [ 0 ])
         , test "removing the root value works" <|
             \() ->
                 Expect.equal True (assertRemoval 0 [ 0, -1, 1 ])

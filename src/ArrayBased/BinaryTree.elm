@@ -76,5 +76,28 @@ fillWithEmptiesUntil index value tree =
 
 
 remove : comparable -> BinaryTree comparable -> BinaryTree comparable
-remove value tree =
-    tree
+remove =
+    removeAt 0
+
+
+removeAt : Int -> comparable -> BinaryTree comparable -> BinaryTree comparable
+removeAt index value tree =
+    case Array.get index tree of
+        Just (Just nodeValue) ->
+            if value < nodeValue then
+                removeAt (2 * index + 1) value tree
+            else if value > nodeValue then
+                removeAt (2 * index + 2) value tree
+            else
+                case ( Array.get (2 * index + 1) tree, Array.get (2 * index + 2) tree ) of
+                    ( Just (Just leftChild), _ ) ->
+                        Array.set index (Just leftChild) (removeAt (2 * index + 1) leftChild tree)
+
+                    ( _, Just (Just rightChild) ) ->
+                        Array.set index (Just rightChild) (removeAt (2 * index + 2) rightChild tree)
+
+                    ( _, _ ) ->
+                        Array.set index Nothing tree
+
+        _ ->
+            tree
