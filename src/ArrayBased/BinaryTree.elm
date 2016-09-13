@@ -35,9 +35,9 @@ memberAt index value tree =
     case Array.get index tree of
         Just (Just nodeValue) ->
             if value < nodeValue then
-                memberAt (2 * index + 1) value tree
+                memberAt (leftChild index) value tree
             else if value > nodeValue then
-                memberAt (2 * index + 2) value tree
+                memberAt (rightChild index) value tree
             else
                 value == nodeValue
 
@@ -55,9 +55,9 @@ insertAt index value tree =
     case Array.get index tree of
         Just (Just nodeValue) ->
             if value < nodeValue then
-                insertAt (2 * index + 1) value tree
+                insertAt (leftChild index) value tree
             else if value > nodeValue then
-                insertAt (2 * index + 2) value tree
+                insertAt (rightChild index) value tree
             else
                 tree
 
@@ -85,19 +85,29 @@ removeAt index value tree =
     case Array.get index tree of
         Just (Just nodeValue) ->
             if value < nodeValue then
-                removeAt (2 * index + 1) value tree
+                removeAt (leftChild index) value tree
             else if value > nodeValue then
-                removeAt (2 * index + 2) value tree
+                removeAt (rightChild index) value tree
             else
-                case ( Array.get (2 * index + 1) tree, Array.get (2 * index + 2) tree ) of
-                    ( Just (Just leftChild), _ ) ->
-                        Array.set index (Just leftChild) (removeAt (2 * index + 1) leftChild tree)
+                case ( Array.get (leftChild index) tree, Array.get (rightChild index) tree ) of
+                    ( Just (Just leftValue), _ ) ->
+                        Array.set index (Just leftValue) (removeAt (leftChild index) leftValue tree)
 
-                    ( _, Just (Just rightChild) ) ->
-                        Array.set index (Just rightChild) (removeAt (2 * index + 2) rightChild tree)
+                    ( _, Just (Just rightValue) ) ->
+                        Array.set index (Just rightValue) (removeAt (rightChild index) rightValue tree)
 
                     ( _, _ ) ->
                         Array.set index Nothing tree
 
         _ ->
             tree
+
+
+leftChild : Int -> Int
+leftChild index =
+    2 * index + 1
+
+
+rightChild : Int -> Int
+rightChild index =
+    2 * index + 2
