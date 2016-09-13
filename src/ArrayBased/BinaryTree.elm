@@ -12,7 +12,12 @@ import Array exposing (Array)
 
 
 type alias BinaryTree comparable =
-    Array (Maybe comparable)
+    Array (Node comparable)
+
+
+type Node comparable
+    = Node comparable
+    | Empty
 
 
 empty : BinaryTree comparable
@@ -22,7 +27,7 @@ empty =
 
 new : comparable -> BinaryTree comparable
 new value =
-    Array.initialize 1 (\_ -> Just value)
+    Array.initialize 1 (\_ -> Node value)
 
 
 member : comparable -> BinaryTree comparable -> Bool
@@ -33,7 +38,7 @@ member =
 memberAt : Int -> comparable -> BinaryTree comparable -> Bool
 memberAt index value tree =
     case Array.get index tree of
-        Just (Just nodeValue) ->
+        Just (Node nodeValue) ->
             if value < nodeValue then
                 memberAt (leftChild index) value tree
             else if value > nodeValue then
@@ -53,7 +58,7 @@ insert =
 insertAt : Int -> comparable -> BinaryTree comparable -> BinaryTree comparable
 insertAt index value tree =
     case Array.get index tree of
-        Just (Just nodeValue) ->
+        Just (Node nodeValue) ->
             if value < nodeValue then
                 insertAt (leftChild index) value tree
             else if value > nodeValue then
@@ -61,8 +66,8 @@ insertAt index value tree =
             else
                 tree
 
-        Just Nothing ->
-            Array.set index (Just value) tree
+        Just Empty ->
+            Array.set index (Node value) tree
 
         Nothing ->
             fillWithEmptiesUntil index value tree
@@ -70,8 +75,8 @@ insertAt index value tree =
 
 fillWithEmptiesUntil : Int -> comparable -> BinaryTree comparable -> BinaryTree comparable
 fillWithEmptiesUntil index value tree =
-    Array.repeat (index - Array.length tree) Nothing
-        |> Array.push (Just value)
+    Array.repeat (index - Array.length tree) Empty
+        |> Array.push (Node value)
         |> Array.append tree
 
 
@@ -83,21 +88,21 @@ remove =
 removeAt : Int -> comparable -> BinaryTree comparable -> BinaryTree comparable
 removeAt index value tree =
     case Array.get index tree of
-        Just (Just nodeValue) ->
+        Just (Node nodeValue) ->
             if value < nodeValue then
                 removeAt (leftChild index) value tree
             else if value > nodeValue then
                 removeAt (rightChild index) value tree
             else
                 case ( Array.get (leftChild index) tree, Array.get (rightChild index) tree ) of
-                    ( Just (Just leftValue), _ ) ->
-                        Array.set index (Just leftValue) (removeAt (leftChild index) leftValue tree)
+                    ( Just (Node leftValue), _ ) ->
+                        Array.set index (Node leftValue) (removeAt (leftChild index) leftValue tree)
 
-                    ( _, Just (Just rightValue) ) ->
-                        Array.set index (Just rightValue) (removeAt (rightChild index) rightValue tree)
+                    ( _, Just (Node rightValue) ) ->
+                        Array.set index (Node rightValue) (removeAt (rightChild index) rightValue tree)
 
                     ( _, _ ) ->
-                        Array.set index Nothing tree
+                        Array.set index Empty tree
 
         _ ->
             tree
