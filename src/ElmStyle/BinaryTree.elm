@@ -61,20 +61,20 @@ remove value tree =
             if value < nodeValue then
                 Node nodeValue (remove value left) right
             else if value > nodeValue then
-                Node nodeValue left (remove value left)
+                Node nodeValue left (remove value right)
             else
                 case ( left, right ) of
                     ( Empty, Empty ) ->
                         empty
 
-                    ( Empty, (Node _ _ _) as rightChild ) ->
-                        rightChild
+                    ( Empty, Node _ _ _ ) ->
+                        right
 
-                    ( (Node _ _ _) as leftChild, Empty ) ->
-                        leftChild
+                    ( Node _ _ _, Empty ) ->
+                        left
 
-                    ( Node _ _ _, (Node rightChildValue _ _) as rightChild ) ->
-                        Node rightChildValue left (remove value rightChild)
+                    ( Node _ _ _, Node rightChildValue _ _ ) ->
+                        Node rightChildValue left (remove rightChildValue right)
 
         Empty ->
             Empty

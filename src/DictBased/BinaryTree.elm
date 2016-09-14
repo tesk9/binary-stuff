@@ -41,7 +41,7 @@ memberAt index value tree =
             else
                 value == nodeValue
 
-        _ ->
+        Nothing ->
             False
 
 
@@ -89,7 +89,7 @@ removeAt index value tree =
                     ( Nothing, Nothing ) ->
                         Dict.remove index tree
 
-        _ ->
+        Nothing ->
             tree
 
 

@@ -55,6 +55,9 @@ suite =
         , test "removing a middle value removes the value" <|
             \() ->
                 Expect.equal True (assertRemoval 0 [ 1, 0, -1, -3, 2 ])
+        , test "removing a right middle value removes the value" <|
+            \() ->
+                Expect.equal True (assertRemoval 3 [ 1, 0, -1, 3, 6 ])
         , test "removing a leaf value removes the value" <|
             \() ->
                 Expect.equal True (assertRemoval 0 [ -1, -2, 0 ])
